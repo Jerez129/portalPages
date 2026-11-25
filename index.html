@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portal CD Bávaro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;800&display=swap">
+<style>
+/*
+VOICE: herramienta de trabajo diaria, directa y ordenada.
+IDEA: un mapa de metro del CD: cada área es una línea y cada herramienta una estación.
+PICTURE: diagrama de cinco líneas que convergen en la estación central "CD Bávaro".
+COLOUR and TYPE: blanco, rojo, azul, ámbar, verde y negro de metro; Figtree 800 + Figtree.
+LAYOUT: título y buscador, mapa grande, luego las estaciones agrupadas por línea.
+*/
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#0e1116);--ink:light-dark(#111418,#eef1f5);--mut:light-dark(#5b6470,#9aa4b2);--card:light-dark(#f4f6f8,#171c24);--line:light-dark(#dde2e8,#262d38);
+--red:#e6261f;--blue:#0a5cff;--amber:#ffb400;--green:#00a05a;--black:light-dark(#111418,#eef1f5)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Figtree,system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(24px,4vw,56px) max(5vw,16px);max-width:1240px;margin:0 auto}
+h1{font-weight:800;font-size:clamp(32px,5vw,48px);line-height:1.05;margin:0 0 8px;text-wrap:balance}
+.lead{color:var(--mut);margin:0 0 20px;max-width:62ch}
+.top{display:flex;flex-wrap:wrap;gap:16px;align-items:end;justify-content:space-between}
+.search{position:relative;flex:1 1 280px;max-width:420px}
+.search input{width:100%;font:16px Figtree,sans-serif;padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);min-height:48px}
+.search input:focus{outline:none;border-color:var(--blue)}
+.fig{position:relative;min-height:340px;margin-top:24px;border-radius:16px;background:var(--card)}
+.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+.fig svg .lbl{font:600 14px Figtree,sans-serif;fill:var(--ink)}
+.fig svg .hub{font:800 15px Figtree,sans-serif;fill:var(--ink)}
+.fig svg g.ln{cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.legend button{font:600 15px Figtree,sans-serif;display:flex;align-items:center;gap:8px;padding:8px 14px;min-height:44px;border-radius:999px;border:2px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.legend button[aria-pressed=true]{border-color:var(--ink)}
+.legend i{width:14px;height:14px;border-radius:50%;display:inline-block}
+.legend button:focus-visible,.card a:focus-visible,.card button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+section.grp{margin-top:36px}
+section.grp h2{font-size:24px;font-weight:800;margin:0 0 14px;display:flex;align-items:center;gap:12px}
+section.grp h2 span.bar{width:36px;height:10px;border-radius:5px}
+section.grp h2 small{font-size:15px;font-weight:600;color:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:14px}
+.card{background:var(--card);border-radius:14px;padding:18px 18px 14px;display:flex;flex-direction:column;gap:8px;border:1px solid var(--line)}
+.card h3{margin:0;font-size:18px;font-weight:800;line-height:1.25;display:flex;gap:10px;align-items:flex-start}
+.card h3 .dot{flex:none;width:16px;height:16px;border-radius:50%;border:4px solid currentColor;background:var(--bg);margin-top:3px}
+.card p{margin:0;color:var(--mut);font-size:15px;flex:1}
+.card .src{font-size:13px;color:var(--mut)}
+.card .act{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.card a.go{flex:1;text-align:center;font-weight:800;text-decoration:none;padding:10px 14px;min-height:44px;border-radius:10px;color:#fff;display:flex;align-items:center;justify-content:center}
+.card button{font:600 14px Figtree,sans-serif;padding:10px 12px;min-height:44px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.tag{font-size:13px;font-weight:600;padding:2px 8px;border-radius:6px;background:var(--bg);border:1px solid var(--line);align-self:flex-start}
+.empty{color:var(--mut);margin-top:30px;display:none}
+footer{color:var(--mut);font-size:13px;margin-top:40px}
+@media(prefers-reduced-motion:no-preference){.card{transition:transform .15s}.card:hover{transform:translateY(-2px)}}
+@media(max-width:600px){.fig{min-height:300px}.fig svg .lbl{font-size:13px}}
+</style>
+</head>
+<body>
+<main class="band">
+  <div class="top">
+    <div>
+      <h1>Portal de herramientas · CD Bávaro</h1>
+      <p class="lead">Los 14 tableros y formularios del CD en un solo lugar, organizados por área. Toca una línea del mapa para ir a sus herramientas.</p>
+    </div>
+    <label class="search"><span style="position:absolute;left:-9999px">Buscar herramienta</span>
+      <input id="q" type="search" placeholder="Buscar: OWD, flota, Forms, TML…" autocomplete="off">
+    </label>
+  </div>
+
+  <div class="fig" id="fig"><svg id="map" role="img" aria-label="Mapa de líneas por área con sus herramientas"></svg></div>
+  <div class="legend" id="legend"></div>
+
+  <div id="groups"></div>
+  <p class="empty" id="empty">No hay herramientas que coincidan con la búsqueda.</p>
+  <footer>Todas las páginas están en jerez129.github.io. Las que se alimentan de Excel se actualizan al cargar el archivo nuevo en cada página.</footer>
+</main>
+
+<script>
+{
+const B='https://jerez129.github.io/';
+const LINES=[
+ {id:'seguridad',name:'Seguridad',c:'var(--red)',hex:'#e6261f'},
+ {id:'distribucion',name:'Distribución',c:'var(--blue)',hex:'#0a5cff'},
+ {id:'flota',name:'Flota',c:'var(--amber)',hex:'#b07c00'},
+ {id:'almacen',name:'Almacén',c:'var(--green)',hex:'#00a05a'},
+ {id:'gestion',name:'Gestión y DPO',c:'var(--black)',hex:'#111418'}
+];
+const T=[
+ {l:'seguridad',n:'Control ACIs',u:'acisPages',src:'Excel de ACIS',d:'Severidad y volumen por semana, acumulado mensual, estatus, involucrados críticos, áreas de mayor riesgo, condiciones frecuentes, top 5 reporteros y carga por líder.'},
+ {l:'distribucion',n:'Estratificación de tiempos',u:'MPDPages',src:'Excel de jornadas · requiere clave',d:'Jornada por entregador y ruta: TML, en ruta, TAR, cuadre, tiempo interno y jornada total, con mapa de estratos, filtros y exportación a CSV.'},
+ {l:'distribucion',n:'Adherencia a la secuencia (Foxtrot)',u:'foxtrotPages',src:'Excel de Foxtrot',d:'Adherencia y cumplimiento por zona, ruta y conductor; top y bottom 10 rutas, paradas fuera de secuencia y no planificadas, heatmap por día.'},
+ {l:'distribucion',n:'Notas públicas',u:'notas-publicas',src:'Microsoft Forms · requiere contraseña',d:'Notas por mes, tipo de reclamo, chofer y ruta, farol por chofer, clientes reincidentes y registro de 5 porqués con acción correctiva.'},
+ {l:'flota',n:'Correctivos de flota',u:'correctivosPages',src:'Excel Check-List BAV',d:'Correctivos de camiones y montacargas por ficha y por sistema, órdenes y correctivos pendientes.'},
+ {l:'flota',n:'Checklist de camiones',u:'camionesPages',src:'Excel "PRE de Bavaro"',d:'Adherencia al checklist pre-uso de camiones, cumplimiento por transportador y fallas registradas.'},
+ {l:'flota',n:'Checklist de montacargas',u:'montacargasPages',src:'Excel de VecFleet',d:'Adherencia al checklist de montacargas por operador, fallas registradas y planificación.'},
+ {l:'flota',n:'Rendimiento de combustible',u:'rendimientoPages',src:'Excel "Rendimiento BVR"',d:'Rendimiento contra metas por ficha, día a día y por chofer, y CO₂ por unidad.'},
+ {l:'almacen',n:'Rotura de producto',u:'roturaPages',src:'Microsoft Forms de rotura',d:'Resumen de la rotura de producto, reportes registrados y pendientes de aprobación.'},
+ {l:'gestion',n:'Cumplimiento de rutinas',u:'accionesPages',src:'Excel de acciones de DPO',d:'Cumplimiento de rutinas y acciones del mes, vista D-1, tendencia, KPIs críticos y calendario de reuniones.'},
+ {l:'gestion',n:'Gatillos y análisis de anomalías',u:'herramientasPages',src:'Plantilla Excel + Microsoft Forms',d:'Gatillos por indicador en el año, plan de análisis y su adherencia, y seguimiento de relatos de anomalía y 5XQ.'},
+ {l:'gestion',n:'Reportes CND (relatos y 5XQ)',u:'CND-Reportes-Web',src:'Formulario propio',d:'Registra relatos de anomalía y 5XQ: indicador, chofer, ruta, qué pasó, causa raíz y acción correctiva, con opción de subirla a DPO.'},
+ {l:'gestion',n:'Adherencia OWD',u:'owdPages',src:'Excel del reporte OWD',d:'Adherencia al plan mensual, por semana y por indicador, plan contra realizado, planificador semanal y DTO por persona.'},
+ {l:'gestion',n:'DPO Academy',u:'dpoPages',src:'Excel de Safety360',d:'Adherencia a entrenamientos por entrenamiento, puesto, pilar y persona, con descarga de faltantes y hoja de respuestas.'}
+];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let active=null;
+
+const legend=document.getElementById('legend');
+legend.innerHTML=LINES.map(L=>`<button type="button" data-l="${L.id}" aria-pressed="false"><i style="background:${L.c}"></i>${esc(L.name)} · ${T.filter(t=>t.l===L.id).length}</button>`).join('');
+
+function render(){
+  const q=document.getElementById('q').value.trim().toLowerCase();
+  let shown=0;
+  const html=LINES.filter(L=>!active||active===L.id).map(L=>{
+    const items=T.filter(t=>t.l===L.id&&(!q||(t.n+' '+t.d+' '+t.src+' '+L.name).toLowerCase().includes(q)));
+    shown+=items.length;
+    if(!items.length)return '';
+    return `<section class="grp" id="${L.id}"><h2><span class="bar" style="background:${L.c}"></span>${esc(L.name)} <small>${items.length} ${items.length>1?'herramientas':'herramienta'}</small></h2><div class="grid">`+
+    items.map(t=>`<article class="card"><h3 style="color:${L.c}"><span class="dot"></span><span style="color:var(--ink)">${esc(t.n)}</span></h3><span class="tag">${esc(t.src)}</span><p>${esc(t.d)}</p><span class="src">${esc('jerez129.github.io/'+t.u)}</span><div class="act"><a class="go" style="background:${L.hex}" href="${B+t.u}/" target="_blank" rel="noopener">Abrir</a><button type="button" data-copy="${B+t.u}/">Copiar enlace</button></div></article>`).join('')+`</div></section>`;
+  }).join('');
+  document.getElementById('groups').innerHTML=html;
+  document.getElementById('empty').style.display=shown?'none':'block';
+  legend.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.l===active)));
+}
+
+function pick(id){active=active===id?null:id;render();draw();if(active){const el=document.getElementById(active);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}}
+legend.addEventListener('click',e=>{const b=e.target.closest('button');if(b)pick(b.dataset.l);});
+document.getElementById('q').addEventListener('input',render);
+document.getElementById('groups').addEventListener('click',async e=>{
+  const b=e.target.closest('button[data-copy]');if(!b)return;
+  try{await navigator.clipboard.writeText(b.dataset.copy);b.textContent='Copiado';}catch(err){b.textContent='No se pudo copiar';}
+  setTimeout(()=>{b.textContent='Copiar enlace';},1600);
+});
+
+const s=document.getElementById('map');
+const draw=()=>{
+  const W=s.clientWidth,H=s.clientHeight;if(!W||!H)return;
+  const narrow=W<520;
+  const padL=narrow?110:150,hubX=W-(narrow?56:90),top=44,bot=H-44;
+  const gap=(bot-top)/(LINES.length-1),hubY=H/2,hubH=Math.min(LINES.length*14+20,H-80);
+  let out='';
+  LINES.forEach((L,i)=>{
+    const y=top+i*gap;
+    const ty=hubY-hubH/2+18+i*((hubH-36)/(LINES.length-1));
+    const bendX=hubX-60-Math.abs(y-ty);
+    const dim=active&&active!==L.id?0.18:1;
+    const pts=`${padL},${y} ${bendX},${y} ${hubX-60},${ty} ${hubX},${ty}`;
+    const n=T.filter(t=>t.l===L.id).length;
+    const sx=k=>padL+16+(bendX-padL-32)*(n===1?0.5:k/(n-1));
+    let st='';for(let k=0;k<n;k++)st+=`<circle cx="${sx(k)}" cy="${y}" r="${narrow?6:8}" fill="var(--bg)" stroke="${L.c}" stroke-width="${narrow?4:5}"/>`;
+    out+=`<g class="ln" data-l="${L.id}" opacity="${dim}"><polyline points="${pts}" fill="none" stroke="${L.c}" stroke-width="${narrow?8:12}" stroke-linejoin="round" stroke-linecap="round"/>${st}<text class="lbl" x="${padL-14}" y="${y+5}" text-anchor="end">${esc(narrow?L.name.split(' ')[0]:L.name)}</text></g>`;
+  });
+  out+=`<rect x="${hubX-14}" y="${hubY-hubH/2}" width="${narrow?40:56}" height="${hubH}" rx="${narrow?20:28}" fill="var(--bg)" stroke="var(--ink)" stroke-width="5"/>`;
+  out+=`<text class="hub" x="${hubX+(narrow?6:14)}" y="${hubY-hubH/2-12}" text-anchor="middle">${narrow?'CD':'CD Bávaro'}</text>`;
+  s.innerHTML=out;
+};
+s.addEventListener('click',e=>{const g=e.target.closest('g.ln');if(g)pick(g.dataset.l);});
+const ro=new ResizeObserver(draw);ro.observe(s);
+render();draw();
+}
+</script>
+</body>
+</html>
