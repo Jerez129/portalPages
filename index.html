@@ -10,7 +10,7 @@
 /*
 VOICE: herramienta de trabajo diaria, directa y ordenada.
 IDEA: un mapa de metro del CD: cada área es una línea y cada herramienta una estación.
-PICTURE: diagrama de cinco líneas que convergen en la estación central "CD Bávaro".
+PICTURE: diagrama de cuatro líneas que convergen en la estación central "CD Bávaro".
 COLOUR and TYPE: blanco, rojo, azul, ámbar, verde y negro de metro; Figtree 800 + Figtree.
 LAYOUT: título y buscador, mapa grande, luego las estaciones agrupadas por línea.
 */
@@ -83,7 +83,6 @@ const LINES=[
  {id:'seguridad',name:'Seguridad',c:'var(--red)',hex:'#e6261f'},
  {id:'distribucion',name:'Distribución',c:'var(--blue)',hex:'#0a5cff'},
  {id:'flota',name:'Flota',c:'var(--amber)',hex:'#b07c00'},
- {id:'almacen',name:'Almacén',c:'var(--green)',hex:'#00a05a'},
  {id:'gestion',name:'Gestión y DPO',c:'var(--black)',hex:'#111418'}
 ];
 const T=[
@@ -95,7 +94,7 @@ const T=[
  {l:'flota',n:'Checklist de camiones',u:'camionesPages',src:'Excel "PRE de Bavaro"',d:'Adherencia al checklist pre-uso de camiones, cumplimiento por transportador y fallas registradas.'},
  {l:'flota',n:'Checklist de montacargas',u:'montacargasPages',src:'Excel de VecFleet',d:'Adherencia al checklist de montacargas por operador, fallas registradas y planificación.'},
  {l:'flota',n:'Rendimiento de combustible',u:'rendimientoPages',src:'Excel "Rendimiento BVR"',d:'Rendimiento contra metas por ficha, día a día y por chofer, y CO₂ por unidad.'},
- {l:'almacen',n:'Rotura de producto',u:'roturaPages',src:'Microsoft Forms de rotura',d:'Resumen de la rotura de producto, reportes registrados y pendientes de aprobación.'},
+ {l:'distribucion',n:'Rotura de producto',u:'roturaPages',src:'Microsoft Forms de rotura',d:'Resumen de la rotura de producto, reportes registrados y pendientes de aprobación.'},
  {l:'gestion',n:'Cumplimiento de rutinas',u:'accionesPages',src:'Excel de acciones de DPO',d:'Cumplimiento de rutinas y acciones del mes, vista D-1, tendencia, KPIs críticos y calendario de reuniones.'},
  {l:'gestion',n:'Gatillos y análisis de anomalías',u:'herramientasPages',src:'Plantilla Excel + Microsoft Forms',d:'Gatillos por indicador en el año, plan de análisis y su adherencia, y seguimiento de relatos de anomalía y 5XQ.'},
  {l:'gestion',n:'Reportes CND (relatos y 5XQ)',u:'CND-Reportes-Web',src:'Formulario propio',d:'Registra relatos de anomalía y 5XQ: indicador, chofer, ruta, qué pasó, causa raíz y acción correctiva, con opción de subirla a DPO.'},
