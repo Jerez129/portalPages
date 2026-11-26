@@ -61,10 +61,10 @@ footer{color:var(--mut);font-size:13px;margin-top:40px}
   <div class="top">
     <div>
       <h1>Portal de herramientas · CD Bávaro</h1>
-      <p class="lead">Los 14 tableros y formularios del CD en un solo lugar, organizados por área. Toca una línea del mapa para ir a sus herramientas.</p>
+      <p class="lead">Los 15 tableros y formularios del CD en un solo lugar, organizados por área. Toca una línea del mapa para ir a sus herramientas.</p>
     </div>
     <label class="search"><span style="position:absolute;left:-9999px">Buscar herramienta</span>
-      <input id="q" type="search" placeholder="Buscar: OWD, flota, Forms, TML…" autocomplete="off">
+      <input id="q" type="search" placeholder="Buscar: OWD, flota, pizarras, TML…" autocomplete="off">
     </label>
   </div>
 
@@ -99,7 +99,8 @@ const T=[
  {l:'gestion',n:'Gatillos y análisis de anomalías',u:'herramientasPages',src:'Plantilla Excel + Microsoft Forms',d:'Gatillos por indicador en el año, plan de análisis y su adherencia, y seguimiento de relatos de anomalía y 5XQ.'},
  {l:'gestion',n:'Reportes CND (relatos y 5XQ)',u:'CND-Reportes-Web',src:'Formulario propio',d:'Registra relatos de anomalía y 5XQ: indicador, chofer, ruta, qué pasó, causa raíz y acción correctiva, con opción de subirla a DPO.'},
  {l:'gestion',n:'Adherencia OWD',u:'owdPages',src:'Excel del reporte OWD',d:'Adherencia al plan mensual, por semana y por indicador, plan contra realizado, planificador semanal y DTO por persona.'},
- {l:'gestion',n:'DPO Academy',u:'dpoPages',src:'Excel de Safety360',d:'Adherencia a entrenamientos por entrenamiento, puesto, pilar y persona, con descarga de faltantes y hoja de respuestas.'}
+ {l:'gestion',n:'DPO Academy',u:'dpoPages',src:'Excel de Safety360',d:'Adherencia a entrenamientos por entrenamiento, puesto, pilar y persona, con descarga de faltantes y hoja de respuestas.'},
+ {l:'gestion',n:'Pizarras del CD',u:'pizarrasPages',src:'Tablero visual',d:'Visualización y seguimiento de indicadores operativos y gestión visual en las pizarras del CD.'}
 ];
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let active=null;
