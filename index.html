@@ -61,7 +61,7 @@ footer{color:var(--mut);font-size:13px;margin-top:40px}
   <div class="top">
     <div>
       <h1>Portal de herramientas · CD Bávaro</h1>
-      <p class="lead">Los 16 tableros y formularios del CD en un solo lugar, organizados por área. Toca una línea del mapa para ir a sus herramientas.</p>
+      <p class="lead">Los 19 tableros y formularios del CD en un solo lugar, organizados por área. Toca una línea del mapa para ir a sus herramientas.</p>
     </div>
     <label class="search"><span style="position:absolute;left:-9999px">Buscar herramienta</span>
       <input id="q" type="search" placeholder="Buscar: OWD, 5S, pizarras, TML…" autocomplete="off">
@@ -73,7 +73,7 @@ footer{color:var(--mut);font-size:13px;margin-top:40px}
 
   <div id="groups"></div>
   <p class="empty" id="empty">No hay herramientas que coincidan con la búsqueda.</p>
-  <footer>Todas las páginas están en jerez129.github.io. Las que se alimentan de Excel se actualizan al cargar el archivo nuevo en cada página.</footer>
+  <footer>Las páginas están en jerez129.github.io, salvo Matinal Digital. Las que se alimentan de Excel se actualizan al cargar el archivo nuevo en cada página.</footer>
 </main>
 
 <script>
@@ -96,6 +96,7 @@ const T=[
  {l:'flota',n:'Rendimiento de combustible',u:'rendimientoPages',src:'Excel "Rendimiento BVR"',d:'Rendimiento contra metas por ficha, día a día y por chofer, y CO₂ por unidad.'},
  {l:'distribucion',n:'Rotura de producto',u:'roturaPages',src:'Microsoft Forms de rotura',d:'Resumen de la rotura de producto, reportes registrados y pendientes de aprobación.'},
  {l:'distribucion',n:'Verificación de carga',u:'verificacionPages',src:'Microsoft Forms de verificación de carga',d:'Porcentaje de cargas con error y tipos de error por mes, ruta, chofer y ayudante, tiempo de conteo y horarios de verificación.'},
+ {l:'distribucion',n:'Matinal Digital',url:'https://matinal-digital-bvr.japf20092004.workers.dev/',src:'Reportes del técnico de guardia + pizarra matutina',d:'La matinal del día lista para presentar: datos de la operación, diálogo de seguridad, alertas y preguntas al final. Una página por día, de lunes a sábado.'},
  {l:'distribucion',n:'Asistencia a matinal',u:'matinalPages',src:'Microsoft Forms de asistencia a matinal',d:'Porcentaje de asistencia por mes, día, posición y persona, quién faltó cada día, calendario de asistencia y faltas seguidas.'},
  {l:'gestion',n:'Cumplimiento de rutinas',u:'accionesPages',src:'Excel de acciones de DPO',d:'Cumplimiento de rutinas y acciones del mes, vista D-1, tendencia, KPIs críticos y calendario de reuniones.'},
  {l:'gestion',n:'Gatillos y análisis de anomalías',u:'herramientasPages',src:'Plantilla Excel + Microsoft Forms',d:'Gatillos por indicador en el año, plan de análisis y su adherencia, y seguimiento de relatos de anomalía y 5XQ.'},
@@ -105,6 +106,8 @@ const T=[
  {l:'gestion',n:'Pizarras del CD',u:'pizarrasPages',src:'Tablero visual',d:'Visualización y seguimiento de indicadores operativos y gestión visual en las pizarras del CD.'},
  {l:'gestion',n:'Auditorías y gestión 5S',u:'5sPages',src:'Tablero 5S',d:'Seguimiento de orden, limpieza y estándares 5S por área del CD, hallazgos y planes de acción.'}
 ];
+const href=t=>t.url||B+t.u+'/';
+const show=t=>href(t).replace(/^https:\/\//,'').replace(/\/$/,'');
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let active=null;
 
@@ -119,7 +122,7 @@ function render(){
     shown+=items.length;
     if(!items.length)return '';
     return `<section class="grp" id="${L.id}"><h2><span class="bar" style="background:${L.c}"></span>${esc(L.name)} <small>${items.length} ${items.length>1?'herramientas':'herramienta'}</small></h2><div class="grid">`+
-    items.map(t=>`<article class="card"><h3 style="color:${L.c}"><span class="dot"></span><span style="color:var(--ink)">${esc(t.n)}</span></h3><span class="tag">${esc(t.src)}</span><p>${esc(t.d)}</p><span class="src">${esc('jerez129.github.io/'+t.u)}</span><div class="act"><a class="go" style="background:${L.hex}" href="${B+t.u}/" target="_blank" rel="noopener">Abrir</a><button type="button" data-copy="${B+t.u}/">Copiar enlace</button></div></article>`).join('')+`</div></section>`;
+    items.map(t=>`<article class="card"><h3 style="color:${L.c}"><span class="dot"></span><span style="color:var(--ink)">${esc(t.n)}</span></h3><span class="tag">${esc(t.src)}</span><p>${esc(t.d)}</p><span class="src">${esc(show(t))}</span><div class="act"><a class="go" style="background:${L.hex}" href="${esc(href(t))}" target="_blank" rel="noopener">Abrir</a><button type="button" data-copy="${esc(href(t))}">Copiar enlace</button></div></article>`).join('')+`</div></section>`;
   }).join('');
   document.getElementById('groups').innerHTML=html;
   document.getElementById('empty').style.display=shown?'none':'block';
